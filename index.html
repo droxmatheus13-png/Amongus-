@@ -3,239 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Among Us - Multiplayer Custom</title>
+    <title>Among Us Custom - Lobby</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ESTILOS GERAIS */
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #050505;
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-        }
+        :root { --main-red: #ff0000; --bg-dark: #050505; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg-dark); color: white; font-family: 'Orbitron', sans-serif; overflow: hidden; }
 
-        /* FUNDO DE ESTRELAS */
-        .stars {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            z-index: -1;
-            animation: moveStars 120s linear infinite;
-        }
+        /* FUNDO ESTRELADO */
+        .stars { position: absolute; width: 200%; height: 200%; background: url('https://www.transparenttextures.com/patterns/stardust.png'); z-index: -1; animation: moveStars 120s linear infinite; }
+        @keyframes moveStars { from { transform: translate(0, 0); } to { transform: translate(-50%, -50%); } }
 
-        @keyframes moveStars {
-            from { transform: translate(0, 0); }
-            to { transform: translate(-50%, -50%); }
-        }
+        /* TELAS */
+        .screen { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100vw; }
+        .active { display: flex; }
 
-        /* TELA INICIAL */
-        h1 {
-            font-size: 2.5rem;
-            color: #fff;
-            text-shadow: 0 0 15px #ff0000;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+        /* COMPONENTES TELA INICIAL */
+        .menu-btns { display: flex; flex-direction: column; gap: 15px; width: 80%; max-width: 300px; }
+        input[type="text"] { padding: 15px; background: rgba(255,255,255,0.1); border: 2px solid #444; color: white; border-radius: 10px; text-align: center; font-family: 'Orbitron'; }
+        button { padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron'; transition: 0.2s; }
+        .btn-white { background: white; color: black; }
+        .btn-red { background: var(--main-red); color: white; box-shadow: 0 0 10px var(--main-red); }
 
-        .menu {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 85%;
-            max-width: 320px;
-            z-index: 2;
-        }
+        /* POP-UP CONFIG */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
+        .modal-content { background: #111; margin: 5% auto; padding: 20px; border: 2px solid var(--main-red); width: 85%; max-width: 350px; border-radius: 20px; max-height: 80vh; overflow-y: auto; }
+        .config-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.7rem; align-items: center; }
+        .config-row input { width: 60px; background: #222; color: #0f0; border: 1px solid #444; padding: 5px; text-align: center; }
 
-        input[type="text"] {
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid #444;
-            color: white;
-            border-radius: 10px;
-            text-align: center;
-            font-family: 'Orbitron', sans-serif;
-        }
+        /* TELA DE LOBBY / CUSTOMIZAÇÃO */
+        .lobby-container { display: flex; width: 95%; height: 80%; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid #333; position: relative; }
+        .char-preview { flex: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        .custom-panel { flex: 1; background: rgba(0,0,0,0.5); padding: 10px; display: flex; flex-direction: column; gap: 10px; border-left: 1px solid #333; overflow-y: auto; }
+        
+        .skin-body { width: 100px; height: 130px; border-radius: 40px 40px 20px 20px; position: relative; transition: 0.3s; border: 4px solid black; }
+        .skin-visor { width: 70px; height: 40px; background: #a6d8e7; border-radius: 20px; position: absolute; top: 25px; right: -5px; border: 4px solid black; }
+        
+        .color-dot { width: 35px; height: 35px; border-radius: 50%; border: 2px solid white; cursor: pointer; display: inline-block; margin: 3px; }
+        .accessory-item { background: #333; padding: 8px; border-radius: 5px; font-size: 0.6rem; text-align: center; cursor: pointer; }
 
-        button {
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-
-        .btn-create { background-color: #ffffff; color: #000; }
-        .btn-call { background-color: #ff0000; color: white; box-shadow: 0 0 10px #ff0000; }
-
-        /* MODAL (POP-UP) */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 10;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.95);
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background: #111;
-            margin: 5% auto;
-            padding: 25px;
-            border: 2px solid #ff0000;
-            width: 80%;
-            max-width: 350px;
-            border-radius: 20px;
-        }
-
-        .modal-content h2 {
-            color: #ff0000;
-            text-align: center;
-            margin-top: 0;
-            font-size: 1.2rem;
-        }
-
-        .config-group {
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .config-group label {
-            font-size: 0.75rem;
-            color: #bbb;
-        }
-
-        .config-group input {
-            width: 70px;
-            background: #222;
-            border: 1px solid #444;
-            color: #00ff00;
-            padding: 5px;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .btn-start {
-            background-color: #00ff00;
-            color: black;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        /* NOTIFICAÇÃO */
-        #notif-alert {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #ff0000;
-            padding: 15px 30px;
-            border-radius: 0 0 20px 20px;
-            transition: 0.5s;
-            z-index: 100;
-            font-weight: bold;
-        }
+        .players-list { position: absolute; bottom: 10px; left: 10px; font-size: 0.6rem; color: #aaa; }
     </style>
 </head>
 <body>
 
     <div class="stars"></div>
 
-    <div id="notif-alert">🚨 ALGUÉM CHAMOU! 🚨</div>
-
-    <h1>AMONG US<br><span style="font-size: 1rem; color: #aaa;">MULTIPLAYER</span></h1>
-
-    <div class="menu">
-        <input type="text" id="username" placeholder="SEU NOME">
-        <button class="btn-create" onclick="abrirModal()">CRIAR SERVIDOR</button>
-        <button class="btn-call" onclick="chamarTodos()">🚨 CHAMAR TODOS 🚨</button>
-    </div>
-
-    <div id="setupModal" class="modal">
-        <div class="modal-content">
-            <h2>CONFIGURAÇÕES</h2>
-            
-            <div class="config-group">
-                <label>Assassinos (0-4):</label>
-                <input type="number" id="assassinos" min="0" max="4" value="1">
-            </div>
-
-            <div class="config-group">
-                <label>Detetives (0-2):</label>
-                <input type="number" id="detetives" min="0" max="2" value="1">
-            </div>
-
-            <div class="config-group">
-                <label>Médicos (0-3):</label>
-                <input type="number" id="medicos" min="0" max="3" value="1">
-            </div>
-
-            <div class="config-group">
-                <label>Lobisomens (0-1):</label>
-                <input type="number" id="lobisomens" min="0" max="1" value="0">
-            </div>
-
-            <div class="config-group">
-                <label>Deformadores (0-1):</label>
-                <input type="number" id="deformadores" min="0" max="1" value="0">
-            </div>
-
-            <div class="config-group">
-                <label>Tempo Morte (seg):</label>
-                <input type="number" id="morte" min="0.9" max="700" value="30">
-            </div>
-
-            <div class="config-group">
-                <label>Tempo Pistas (seg):</label>
-                <input type="number" id="pistas" min="0.1" max="800" value="20">
-            </div>
-
-            <button class="btn-start" onclick="iniciarJogo()">INICIAR PARTIDA</button>
-            <button onclick="fecharModal()" style="background:none; color: #666; width:100%; margin-top:10px;">Voltar</button>
+    <div id="screen-home" class="screen active">
+        <h1>AMONG US</h1>
+        <div class="menu-btns">
+            <input type="text" id="username" placeholder="SEU NOME">
+            <button class="btn-white" onclick="abrirConfig()">CRIAR SERVIDOR</button>
+            <button class="btn-red" onclick="chamarAlerta()">🚨 CHAMAR TODOS 🚨</button>
         </div>
     </div>
 
-    <audio id="audioEmergencia" src="https://www.myinstants.com/media/sounds/among-us-emergency-meeting.mp3"></audio>
+    <div id="modalConfig" class="modal">
+        <div class="modal-content">
+            <h2 style="color:var(--main-red); text-align:center; font-size:1rem;">CONFIGURAÇÕES</h2>
+            <div class="config-row"><label>Assassinos (0-4):</label><input type="number" id="cfg-ass" value="1" max="4"></div>
+            <div class="config-row"><label>Detetives (0-2):</label><input type="number" id="cfg-det" value="1" max="2"></div>
+            <div class="config-row"><label>Médicos (0-3):</label><input type="number" id="cfg-med" value="1" max="3"></div>
+            <div class="config-row"><label>Lobisomens (0-1):</label><input type="number" id="cfg-lob" value="0" max="1"></div>
+            <div class="config-row"><label>Deformadores (0-1):</label><input type="number" id="cfg-def" value="0" max="1"></div>
+            <div class="config-row"><label>Tempo Morte (seg):</label><input type="number" id="cfg-tmorte" value="30"></div>
+            <div class="config-row"><label>Tempo Pistas (seg):</label><input type="number" id="cfg-tpista" value="20"></div>
+            
+            <button class="btn-red" style="width:100%; margin-top:10px;" onclick="criarServidorDeVez()">CRIAR SERVIDOR</button>
+            <button onclick="fecharConfig()" style="background:none; color:gray; width:100%; margin-top:5px;">CANCELAR</button>
+        </div>
+    </div>
+
+    <div id="screen-lobby" class="screen">
+        <h2 id="lobby-title" style="margin-bottom:10px; font-size:1rem;">LOBBY DE: <span id="display-name"></span></h2>
+        
+        <div class="lobby-container">
+            <div class="char-preview">
+                <div id="mySkin" class="skin-body" style="background-color: red;">
+                    <div class="skin-visor"></div>
+                </div>
+                <p style="margin-top:15px; font-size:0.8rem;">VOCÊ</p>
+                <div class="players-list">Tripulantes na sala: 1/10</div>
+            </div>
+
+            <div class="custom-panel">
+                <p style="font-size:0.7rem; text-align:center;">CORES</p>
+                <div style="text-align:center;">
+                    <div class="color-dot" style="background:red;" onclick="changeColor('red')"></div>
+                    <div class="color-dot" style="background:blue;" onclick="changeColor('blue')"></div>
+                    <div class="color-dot" style="background:green;" onclick="changeColor('green')"></div>
+                    <div class="color-dot" style="background:yellow;" onclick="changeColor('yellow')"></div>
+                    <div class="color-dot" style="background:purple;" onclick="changeColor('purple')"></div>
+                    <div class="color-dot" style="background:orange;" onclick="changeColor('orange')"></div>
+                </div>
+                <p style="font-size:0.7rem; text-align:center; margin-top:10px;">ACESSÓRIOS</p>
+                <div class="accessory-item">Chapéu de Festa</div>
+                <div class="accessory-item">Coroa</div>
+                <div class="accessory-item">Planta</div>
+                
+                <button class="btn-red" style="margin-top:auto; font-size:0.7rem;" onclick="location.reload()">SAIR</button>
+            </div>
+        </div>
+        <button class="btn-white" style="margin-top:15px; width:90%; max-width:400px;">COMEÇAR JOGO 🚀</button>
+    </div>
+
+    <audio id="sndEmerg" src="https://www.myinstants.com/media/sounds/among-us-emergency-meeting.mp3"></audio>
 
     <script>
-        function abrirModal() {
+        function abrirConfig() {
+            if(!document.getElementById('username').value) return alert("Digite seu nome!");
+            document.getElementById('modalConfig').style.display = 'block';
+        }
+
+        function fecharConfig() {
+            document.getElementById('modalConfig').style.display = 'none';
+        }
+
+        function criarServidorDeVez() {
             const nome = document.getElementById('username').value;
-            if(!nome) { alert("Digite seu nome primeiro!"); return; }
-            document.getElementById('setupModal').style.display = "block";
-        }
-
-        function fecharModal() {
-            document.getElementById('setupModal').style.display = "none";
-        }
-
-        function chamarTodos() {
-            const alerta = document.getElementById('notif-alert');
-            const som = document.getElementById('audioEmergencia');
+            document.getElementById('display-name').innerText = nome.toUpperCase();
             
-            alerta.style.top = "0px";
-            som.play();
-
-            setTimeout(() => {
-                alerta.style.top = "-100px";
-            }, 4000);
+            // Troca de tela
+            fecharConfig();
+            document.getElementById('screen-home').classList.remove('active');
+            document.getElementById('screen-lobby').classList.add('active');
         }
 
-        function iniciarJogo() {
-            alert("Sincronizando com tripulantes... Aguarde o início!");
-            fecharModal();
+        function changeColor(color) {
+            document.getElementById('mySkin').style.backgroundColor = color;
+        }
+
+        function chamarAlerta() {
+            document.getElementById('sndEmerg').play();
+            alert("VOCÊ CHAMOU SEUS AMIGOS!");
         }
     </script>
 </body>
