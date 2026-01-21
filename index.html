@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Among Us Clone</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100-vh;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            z-index: -1;
+            animation: moveStars 50s linear infinite;
+        }
+
+        @keyframes moveStars {
+            from { background-position: 0 0; }
+            to { background-position: -1000px 1000px; }
+        }
+
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 5px;
+            color: #ff0000;
+            text-shadow: 3px 3px #fff;
+            margin-bottom: 50px;
+        }
+
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        input {
+            padding: 15px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        button {
+            padding: 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+        .btn-create { background-color: #4CAF50; color: white; }
+        .btn-join { background-color: #2196F3; color: white; }
+        
+        button:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    
+    <h1>AMONG US</h1>
+
+    <div class="menu-container">
+        <input type="text" id="playerName" placeholder="DIGITE SEU NOME...">
+        <button class="btn-create" onclick="createGame()">CRIAR SALA</button>
+        <button class="btn-join" onclick="joinGame()">ENTRAR NO JOGO</button>
+    </div>
+
+    <script>
+        function createGame() {
+            const name = document.getElementById('playerName').value;
+            if(name) alert("Criando sala para: " + name);
+            else alert("Digite seu nome primeiro!");
+        }
+
+        function joinGame() {
+            const name = document.getElementById('playerName').value;
+            if(name) alert("Buscando salas...");
+            else alert("Digite seu nome primeiro!");
+        }
+    </script>
+</body>
+</html>
