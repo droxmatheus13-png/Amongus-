@@ -3,139 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Among Us Custom - Lobby</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --main-red: #ff0000; --bg-dark: #050505; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg-dark); color: white; font-family: 'Orbitron', sans-serif; overflow: hidden; }
-
-        /* FUNDO ESTRELADO */
-        .stars { position: absolute; width: 200%; height: 200%; background: url('https://www.transparenttextures.com/patterns/stardust.png'); z-index: -1; animation: moveStars 120s linear infinite; }
-        @keyframes moveStars { from { transform: translate(0, 0); } to { transform: translate(-50%, -50%); } }
-
-        /* TELAS */
-        .screen { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100vw; }
-        .active { display: flex; }
-
-        /* COMPONENTES TELA INICIAL */
-        .menu-btns { display: flex; flex-direction: column; gap: 15px; width: 80%; max-width: 300px; }
-        input[type="text"] { padding: 15px; background: rgba(255,255,255,0.1); border: 2px solid #444; color: white; border-radius: 10px; text-align: center; font-family: 'Orbitron'; }
-        button { padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron'; transition: 0.2s; }
-        .btn-white { background: white; color: black; }
-        .btn-red { background: var(--main-red); color: white; box-shadow: 0 0 10px var(--main-red); }
-
-        /* POP-UP CONFIG */
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { background: #111; margin: 5% auto; padding: 20px; border: 2px solid var(--main-red); width: 85%; max-width: 350px; border-radius: 20px; max-height: 80vh; overflow-y: auto; }
-        .config-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.7rem; align-items: center; }
-        .config-row input { width: 60px; background: #222; color: #0f0; border: 1px solid #444; padding: 5px; text-align: center; }
-
-        /* TELA DE LOBBY / CUSTOMIZAÇÃO */
-        .lobby-container { display: flex; width: 95%; height: 80%; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid #333; position: relative; }
-        .char-preview { flex: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-        .custom-panel { flex: 1; background: rgba(0,0,0,0.5); padding: 10px; display: flex; flex-direction: column; gap: 10px; border-left: 1px solid #333; overflow-y: auto; }
-        
-        .skin-body { width: 100px; height: 130px; border-radius: 40px 40px 20px 20px; position: relative; transition: 0.3s; border: 4px solid black; }
-        .skin-visor { width: 70px; height: 40px; background: #a6d8e7; border-radius: 20px; position: absolute; top: 25px; right: -5px; border: 4px solid black; }
-        
-        .color-dot { width: 35px; height: 35px; border-radius: 50%; border: 2px solid white; cursor: pointer; display: inline-block; margin: 3px; }
-        .accessory-item { background: #333; padding: 8px; border-radius: 5px; font-size: 0.6rem; text-align: center; cursor: pointer; }
-
-        .players-list { position: absolute; bottom: 10px; left: 10px; font-size: 0.6rem; color: #aaa; }
-    </style>
+    <title>Cena 3D - Primeira Pessoa com Mesa Among Us</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
 </head>
 <body>
 
-    <div class="stars"></div>
+    <a-scene>
+        <a-plane 
+            position="0 0 0" 
+            rotation="-90 0 0" 
+            width="1000" 
+            height="1000" 
+            color="#2c2c2c">
+        </a-plane>
 
-    <div id="screen-home" class="screen active">
-        <h1>AMONG US</h1>
-        <div class="menu-btns">
-            <input type="text" id="username" placeholder="SEU NOME">
-            <button class="btn-white" onclick="abrirConfig()">CRIAR SERVIDOR</button>
-            <button class="btn-red" onclick="chamarAlerta()">🚨 CHAMAR TODOS 🚨</button>
+        <a-sky color="#87CEEB"></a-sky>
+
+        <a-light type="ambient" color="#444"></a-light>
+        <a-light type="directional" intensity="0.5" position="-1 1 2"></a-light>
+
+        <a-entity id="rig" position="0 1.6 0">
+            <a-camera look-controls wasd-controls="acceleration: 20">
+                <a-cursor color="#FF0000"></a-cursor>
+            </a-camera>
+        </a-entity>
+
+        <a-box position="-2 0.5 -5" color="#4CC3D9"></a-box>
+        <a-sphere position="2 1.25 -7" radius="1.25" color="#EF2D5E"></a-sphere>
+        <a-cylinder position="5 0.75 -4" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+
+        <a-entity id="among-us-table">
+            <a-box 
+                position="1.5 0.8 -2" 
+                width="2.5" 
+                height="0.1" 
+                depth="1.2" 
+                color="#5D4037"> </a-box>
+
+            <a-box 
+                position="0.5 0.3 -1.5" 
+                width="0.15" 
+                height="0.6" 
+                depth="0.15" 
+                color="#3E2723"> </a-box>
+
+            <a-box 
+                position="2.5 0.3 -1.5" 
+                width="0.15" 
+                height="0.6" 
+                depth="0.15" 
+                color="#3E2723">
+            </a-box>
+
+            <a-box 
+                position="0.5 0.3 -2.5" 
+                width="0.15" 
+                height="0.6" 
+                depth="0.15" 
+                color="#3E2723">
+            </a-box>
+
+            <a-box 
+                position="2.5 0.3 -2.5" 
+                width="0.15" 
+                height="0.6" 
+                depth="0.15" 
+                color="#3E2723">
+            </a-box>
+        </a-entity>
+        </a-scene>
+
+    <div style="position: fixed; bottom: 20px; left: 20px; z-index: 999; display: flex; flex-direction: column; gap: 5px;">
+        <div style="display: flex; justify-content: center;">
+            <button id="moveUp" style="width: 50px; height: 50px;">↑</button>
         </div>
-    </div>
-
-    <div id="modalConfig" class="modal">
-        <div class="modal-content">
-            <h2 style="color:var(--main-red); text-align:center; font-size:1rem;">CONFIGURAÇÕES</h2>
-            <div class="config-row"><label>Assassinos (0-4):</label><input type="number" id="cfg-ass" value="1" max="4"></div>
-            <div class="config-row"><label>Detetives (0-2):</label><input type="number" id="cfg-det" value="1" max="2"></div>
-            <div class="config-row"><label>Médicos (0-3):</label><input type="number" id="cfg-med" value="1" max="3"></div>
-            <div class="config-row"><label>Lobisomens (0-1):</label><input type="number" id="cfg-lob" value="0" max="1"></div>
-            <div class="config-row"><label>Deformadores (0-1):</label><input type="number" id="cfg-def" value="0" max="1"></div>
-            <div class="config-row"><label>Tempo Morte (seg):</label><input type="number" id="cfg-tmorte" value="30"></div>
-            <div class="config-row"><label>Tempo Pistas (seg):</label><input type="number" id="cfg-tpista" value="20"></div>
-            
-            <button class="btn-red" style="width:100%; margin-top:10px;" onclick="criarServidorDeVez()">CRIAR SERVIDOR</button>
-            <button onclick="fecharConfig()" style="background:none; color:gray; width:100%; margin-top:5px;">CANCELAR</button>
+        <div style="display: flex; gap: 5px;">
+            <button id="moveLeft" style="width: 50px; height: 50px;">←</button>
+            <button id="moveDown" style="width: 50px; height: 50px;">↓</button>
+            <button id="moveRight" style="width: 50px; height: 50px;">→</button>
         </div>
+        <p style="color: white; font-family: sans-serif; background: rgba(0,0,0,0.5); padding: 5px;">Use o Mouse para olhar</p>
     </div>
-
-    <div id="screen-lobby" class="screen">
-        <h2 id="lobby-title" style="margin-bottom:10px; font-size:1rem;">LOBBY DE: <span id="display-name"></span></h2>
-        
-        <div class="lobby-container">
-            <div class="char-preview">
-                <div id="mySkin" class="skin-body" style="background-color: red;">
-                    <div class="skin-visor"></div>
-                </div>
-                <p style="margin-top:15px; font-size:0.8rem;">VOCÊ</p>
-                <div class="players-list">Tripulantes na sala: 1/10</div>
-            </div>
-
-            <div class="custom-panel">
-                <p style="font-size:0.7rem; text-align:center;">CORES</p>
-                <div style="text-align:center;">
-                    <div class="color-dot" style="background:red;" onclick="changeColor('red')"></div>
-                    <div class="color-dot" style="background:blue;" onclick="changeColor('blue')"></div>
-                    <div class="color-dot" style="background:green;" onclick="changeColor('green')"></div>
-                    <div class="color-dot" style="background:yellow;" onclick="changeColor('yellow')"></div>
-                    <div class="color-dot" style="background:purple;" onclick="changeColor('purple')"></div>
-                    <div class="color-dot" style="background:orange;" onclick="changeColor('orange')"></div>
-                </div>
-                <p style="font-size:0.7rem; text-align:center; margin-top:10px;">ACESSÓRIOS</p>
-                <div class="accessory-item">Chapéu de Festa</div>
-                <div class="accessory-item">Coroa</div>
-                <div class="accessory-item">Planta</div>
-                
-                <button class="btn-red" style="margin-top:auto; font-size:0.7rem;" onclick="location.reload()">SAIR</button>
-            </div>
-        </div>
-        <button class="btn-white" style="margin-top:15px; width:90%; max-width:400px;">COMEÇAR JOGO 🚀</button>
-    </div>
-
-    <audio id="sndEmerg" src="https://www.myinstants.com/media/sounds/among-us-emergency-meeting.mp3"></audio>
 
     <script>
-        function abrirConfig() {
-            if(!document.getElementById('username').value) return alert("Digite seu nome!");
-            document.getElementById('modalConfig').style.display = 'block';
+        const rig = document.querySelector('#rig');
+        const speed = 0.1;
+
+        function move(direction) {
+            const pos = rig.getAttribute('position');
+            // 'z' é a profundidade, 'x' é a largura.
+            // Para mover para frente/trás, ajustamos 'z'.
+            // Para mover para esquerda/direita, ajustamos 'x'.
+            if(direction === 'up') pos.z -= speed;
+            if(direction === 'down') pos.z += speed;
+            if(direction === 'left') pos.x -= speed;
+            if(direction === 'right') pos.x += speed;
+            rig.setAttribute('position', pos);
         }
 
-        function fecharConfig() {
-            document.getElementById('modalConfig').style.display = 'none';
-        }
-
-        function criarServidorDeVez() {
-            const nome = document.getElementById('username').value;
-            document.getElementById('display-name').innerText = nome.toUpperCase();
-            
-            // Troca de tela
-            fecharConfig();
-            document.getElementById('screen-home').classList.remove('active');
-            document.getElementById('screen-lobby').classList.add('active');
-        }
-
-        function changeColor(color) {
-            document.getElementById('mySkin').style.backgroundColor = color;
-        }
-
-        function chamarAlerta() {
-            document.getElementById('sndEmerg').play();
-            alert("VOCÊ CHAMOU SEUS AMIGOS!");
-        }
+        let timer;
+        const buttons = ['moveUp', 'moveDown', 'moveLeft', 'moveRight'];
+        buttons.forEach(id => {
+            const btn = document.getElementById(id);
+            btn.addEventListener('mousedown', () => {
+                const dir = id.replace('move', '').toLowerCase();
+                timer = setInterval(() => move(dir), 30);
+            });
+            btn.addEventListener('mouseup', () => clearInterval(timer));
+            btn.addEventListener('mouseleave', () => clearInterval(timer));
+            btn.addEventListener('touchstart', (e) => { // Para dispositivos móveis
+                e.preventDefault(); // Previne o scroll da página
+                const dir = id.replace('move', '').toLowerCase();
+                timer = setInterval(() => move(dir), 30);
+            }, { passive: false }); // Usar { passive: false } para permitir preventDefault
+            btn.addEventListener('touchend', () => clearInterval(timer));
+            btn.addEventListener('touchcancel', () => clearInterval(timer));
+        });
     </script>
+
 </body>
 </html>
